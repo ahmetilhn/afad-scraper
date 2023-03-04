@@ -8,8 +8,6 @@ import cheerio from "cheerio";
  */
 
 class AfadScraper {
-  constructor() {}
-
   fetchAfad = async () => {
     try {
       const res = await fetch(
@@ -73,8 +71,3 @@ class AfadScraper {
     return this.parseHTML(html);
   };
 }
-
-const scraper = new AfadScraper();
-(async () => {
-  await scraper.getEarthquakes();
-})();
