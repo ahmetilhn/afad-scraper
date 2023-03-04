@@ -1,0 +1,12 @@
+{
+  "name": "afad-scraper",
+  "version": "1.0.0",
+  "main": "scraper.js",
+  "repository": "git@github.com:ahmetilhn/afad-scraper.git",
+  "author": "Ahmet ilhan <ahmetilhan.dev@gmail.com>",
+  "type": "module",
+  "license": "MIT",
+  "peerDependencies": {
+    "cheerio": "^1.0.0-rc.12"
+  }
+}
