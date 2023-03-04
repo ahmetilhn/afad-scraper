@@ -71,3 +71,5 @@ class AfadScraper {
     return this.parseHTML(html);
   };
 }
+
+module.export = AfadScraper;
