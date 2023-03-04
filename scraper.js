@@ -72,4 +72,4 @@ class AfadScraper {
   };
 }
 
-module.export = AfadScraper;
+export default AfadScraper;
