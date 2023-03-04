@@ -1,6 +1,6 @@
 {
   "name": "afad-scraper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "scraper.js",
   "repository": "git@github.com:ahmetilhn/afad-scraper.git",
   "keywords": ["Afad scraper", "turkey earthquakes", "earthqakes scraper", "scraper micro module"],
