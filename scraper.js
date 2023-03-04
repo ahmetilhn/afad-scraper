@@ -67,7 +67,6 @@ class AfadScraper {
 
   getEarthquakes = async () => {
     const html = await this.fetchAfad();
-    console.log(this.parseHTML(html));
     return this.parseHTML(html);
   };
 }
