@@ -53,7 +53,7 @@ class AfadScraper {
         ] = $(el).find("td");
         data.push({
           ID: $(ID).text(), // string
-          Date: $(CreatedDate).text().replaceAll("-", "/"), // Date | string
+          Date: $(CreatedDate).text()?.replaceAll("-", "/"), // Date | string
           Latitude: Number($(Latitude).text()), // Float
           Longitude: Number($(Longitude).text()), // Float
           Depth: Number($(Depth).text()), // Float
