@@ -1,6 +1,4 @@
-import cheerio from "cheerio";
-
-/****
+/*
  *
  * @param {string} html  = returned html from afad.gov.tr
  *
@@ -8,20 +6,6 @@ import cheerio from "cheerio";
  */
 
 class AfadScraper {
-  fetchAfad = async () => {
-    try {
-      const res = await fetch(
-        "https://deprem.afad.gov.tr/last-earthquakes.html",
-        {
-          method: "GET",
-        }
-      );
-      return res.text();
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
-
   parseRegion = (region) => {
     let [district, city] = region?.split("("); // -> istanbul)
     city = city?.split(")")[0]; // -> istanbul
@@ -35,40 +19,46 @@ class AfadScraper {
     };
   };
 
-  parseHTML = (html) => {
-    const $ = cheerio.load(html);
-    let data = []; // <Array
-    $("tbody")
-      .find("tr")
-      .map((i, el) => {
-        const [
-          CreatedDate,
-          Latitude,
-          Longitude,
-          Depth,
-          Type,
-          Magnitude,
-          Region,
-          ID,
-        ] = $(el).find("td");
-        data.push({
-          ID: $(ID).text(), // string
-          Date: $(CreatedDate).text()?.replaceAll("-", "/"), // Date | string
-          Latitude: Number($(Latitude).text()), // Float
-          Longitude: Number($(Longitude).text()), // Float
-          Depth: Number($(Depth).text()), // Float
-          Magnitude: Number($(Magnitude).text()), // Float
-          Region: this.parseRegion($(Region).text()), // Object {City: İstanbul, District: Kadıköy}
-          Type: $(Type).text(), // string
-        });
+  parseData = (data) => {
+    let _parsedData = []; // <Array
+    data.map((item) => {
+      _parsedData.push({
+        ID: item.id.toString(), // string
+        Date: item.eventDate.toString().replaceAll("-", "/"), // Date | string
+        Latitude: Number(item.latitude.toString()), // Float
+        Longitude: Number(item.longitude.toString()), // Float
+        Depth: Number(item.depth.toString()), // Float
+        Magnitude: Number(item.magnitude.toString()), // Float
+        Region: this.parseRegion(item.location.toString()), // Object {City: İstanbul, District: Kadıköy}
+        Type: item.magnitudeType.toString(), // string
       });
-    return data;
+    });
+    return _parsedData;
   };
 
   getEarthquakes = async () => {
-    const html = await this.fetchAfad();
-    return this.parseHTML(html);
+    const res = await fetch(
+      "https://deprem.afad.gov.tr/EventData/GetEventsByFilter",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          EventSearchFilterList: [
+            { FilterType: 9, Value: "2023-06-04T10:00:44.095Z" },
+            { FilterType: 8, Value: "2023-05-28T10:00:44.095Z" },
+          ],
+          Skip: 0,
+          Take: 300,
+          SortDescriptor: { field: "eventDate", dir: "desc" },
+        }),
+        headers: {
+          Accept: "application/json, text/plain",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        mode: "no-cors",
+      }
+    );
+    const json = await res.json();
+    return this.parseData(json?.eventList || []);
   };
 }
-
 export default AfadScraper;

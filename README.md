@@ -2,7 +2,6 @@
 
 Scraper for last earthquakes from afad.gov.tr
 
-_!!Please download peer dependence `cheerio`_
 ## Usage
 
 ```js
